@@ -1,6 +1,5 @@
 package com.kotlinswipecard
 
-import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 
 class CardStackManager(): RecyclerView.LayoutManager() {
