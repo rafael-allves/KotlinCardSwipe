@@ -1,8 +1,9 @@
 package com.kotlinswipecard
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 
-class CardStackManager: RecyclerView.LayoutManager() {
+class CardStackManager(): RecyclerView.LayoutManager() {
     override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams {
         return RecyclerView.LayoutParams(
             RecyclerView.LayoutParams.MATCH_PARENT,
