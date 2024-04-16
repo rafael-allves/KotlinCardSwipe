@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">KotlinSwipeCard</string>
+    <string name="profile_image">Profile image</string>
 </resources>
