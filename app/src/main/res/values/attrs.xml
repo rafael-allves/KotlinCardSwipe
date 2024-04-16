@@ -2,9 +2,24 @@
 <resources>
     <declare-styleable name="CardStackView">
         <attr name="stackOrientation" format="enum">
-            <enum name="vertical" value="0"/>
-            <enum name="horizontal" value="1"/>
+            <enum name="vertical" value="0" />
+            <enum name="horizontal" value="1" />
         </attr>
-        <attr name="animationStyle" format="string"/>
+        <attr name="animationStyle" format="string" />
+
+        <attr name="alowed_swipe_directions" format="integer">
+            <enum name="only_left" value="0" />
+            <enum name="only_right" value="1" />
+            <enum name="both" value="2" />
+        </attr>
+
+        <attr name="animation_duration" format="integer" />
+        <attr name="stack_size" format="integer" />
+        <attr name="stack_spacing" format="dimension" />
+        <attr name="stack_rotation" format="integer" />
+        <attr name="swipe_rotation" format="float" />
+        <attr name="swipe_opacity" format="float" />
+        <attr name="scale_factor" format="float" />
+        <attr name="disable_h2_acceleration" format="boolean" />
     </declare-styleable>
 </resources>
