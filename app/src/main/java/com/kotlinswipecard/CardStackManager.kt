@@ -1,8 +1,10 @@
 package com.kotlinswipecard
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 
-class CardStackManager(): RecyclerView.LayoutManager() {
+class CardStackManager(context: Context): RecyclerView.LayoutManager() {
+
     override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams {
         return RecyclerView.LayoutParams(
             RecyclerView.LayoutParams.MATCH_PARENT,
@@ -10,17 +12,30 @@ class CardStackManager(): RecyclerView.LayoutManager() {
         )
     }
 
-    override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
-        super.onLayoutChildren(recycler, state)
+
+    override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
+        detachAndScrapAttachedViews(recycler)
+
+        var yOffset = 0
+        for (i in 0 until itemCount) {
+            val view = recycler.getViewForPosition(i)
+            addView(view)
+            measureChildWithMargins(view, 0, 0)
+            val width = getDecoratedMeasuredWidth(view)
+            val height = getDecoratedMeasuredHeight(view)
+            layoutDecorated(view, 0, yOffset, width, yOffset + height)
+            yOffset += height // Stack vertically, offset each card slightly
+        }
     }
 
     override fun canScrollHorizontally(): Boolean {
-        return true
+        return false
     }
 
     override fun canScrollVertically(): Boolean {
-        return true
+        return false
     }
+
 
     override fun scrollHorizontallyBy(dx: Int, recycler: RecyclerView.Recycler?, state: RecyclerView.State?): Int {
         return super.scrollHorizontallyBy(dx, recycler, state)

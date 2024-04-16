@@ -5,12 +5,28 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 
-class CardStackView(context: Context) : RecyclerView(context) {
+class CardStackView : RecyclerView {
 
-    constructor(context: Context, attrs: AttributeSet?) : this(context)
+    private var animationStyle: String? = null
+    private var stackOrientation: Int = 0
+    constructor(context: Context): super(context)
+
+    constructor(context: Context, attrs: AttributeSet?): super(context, attrs) {
+        init(attrs, 0)
+    }
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int = 0) : super(context, attrs, defStyle) {
+        init(attrs, defStyle)
+    }
+
+    private fun init(attrs: AttributeSet?, defStyle: Int) {
+
+        if (layoutManager == null) layoutManager = CardStackManager(context)
+
+        // TODO: Implement custom attributes
+    }
 
     override fun setAdapter(adapter: Adapter<*>?) {
-        if (layoutManager == null) layoutManager = CardStackManager()
+        if (layoutManager == null) layoutManager = CardStackManager(context)
 
         super.setAdapter(adapter)
     }
