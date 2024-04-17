@@ -8,13 +8,13 @@ class StackManager<T>: Stack<T>() {
 
     private val lastPop: T? = null
 
-    fun pop(adapter: Adapter<RecyclerView.ViewHolder>?): T? {
+    fun pop(adapter: Adapter<RecyclerView.ViewHolder>?): T {
         if ( size != 0 ) {
             adapter?.notifyItemRemoved(size - 1)
 
             return super.pop()
         }
-        return lastPop
+        return lastPop!!
     }
 
     fun push(item: T, adapter: Adapter<RecyclerView.ViewHolder>?): T {
