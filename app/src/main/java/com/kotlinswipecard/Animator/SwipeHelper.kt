@@ -3,25 +3,17 @@ package com.kotlinswipecard.Animator
 import android.animation.Animator
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
+
 import android.view.animation.OvershootInterpolator
 import com.kotlinswipecard.StackManager
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-class SwipeHelper(private val swipeStack: StackManager) : OnTouchListener {
-    private var observedView: View? = null
-    private var listenForTouchEvents: Boolean = false
+class SwipeHelper(private val swipeStack: StackManager) : AbstractSwiper() {
     private var downX: Float = 0f
     private var downY: Float = 0f
-    private var initialX: Float = 0f
-    private var initialY: Float = 0f
     private var pointerId: Int = 0
-    private var rotateDegreess: Float = 0f
-    private var opacityEnd: Float = 0f
-    private var animationDuration: Int = 0
-
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         when (event?.action) {
@@ -144,35 +136,6 @@ class SwipeHelper(private val swipeStack: StackManager) : OnTouchListener {
                     }
                 })
         }
-    }
-
-    fun registerObservedView(view: View?, initialX: Float, initialY: Float) {
-        if (view == null) return
-        observedView = view
-        observedView!!.setOnTouchListener(this)
-        this.initialX = initialX
-        this.initialY = initialY
-        listenForTouchEvents = true
-    }
-
-    fun unRegisterObservedView() {
-        if (observedView != null)
-            observedView!!.setOnTouchListener(null)
-
-        observedView = null
-        listenForTouchEvents = false
-    }
-
-    fun setAnimationDUration(duration: Int) {
-        animationDuration = duration
-    }
-
-    fun setRotation(rotation: Float) {
-        rotateDegreess = rotation
-    }
-
-    fun setOpacityEnd(alpha: Float) {
-        opacityEnd = alpha
     }
 
     fun swipeViewToLeft() {
