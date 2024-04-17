@@ -3,9 +3,8 @@ package com.kotlinswipecard.Swiper
 import android.animation.Animator
 import android.view.MotionEvent
 import android.view.View
-
-import android.view.animation.OvershootInterpolator
 import com.kotlinswipecard.Animator.AnimationUtil
+import com.kotlinswipecard.Animator.SwipesAnimator
 import com.kotlinswipecard.StackManager
 import kotlin.math.abs
 import kotlin.math.max
@@ -15,6 +14,7 @@ class SwipeHelper(private val swipeStack: StackManager) : AbstractSwiper() {
     private var downX: Float = 0f
     private var downY: Float = 0f
     private var pointerId: Int = 0
+    private val swipesAnimator: SwipesAnimator = SwipesAnimator()
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         when (event?.action) {
@@ -93,26 +93,14 @@ class SwipeHelper(private val swipeStack: StackManager) : AbstractSwiper() {
     }
 
     private fun resetViewPosition() {
-        observedView!!.animate()
-            .x(initialX)
-            .y(initialY)
-            .rotation(0f)
-            .alpha(1f)
-            .setDuration(animationDuration.toLong())
-            .setInterpolator(OvershootInterpolator(1.4f))
-            .setListener(null)
+        swipesAnimator.animateResetPosition(observedView!!, initialX, initialY, animationDuration)
     }
 
     private fun swipeViewToLeft(duration: Int) {
         if (!listenForTouchEvents) return
         listenForTouchEvents = false
         observedView?.let { view ->
-            view.animate().cancel()
-            view.animate()
-                .x(-swipeStack.width + view.x)
-                .rotation(-rotateDegreess)
-                .alpha(0f)
-                .setDuration(duration.toLong())
+            swipesAnimator.animateHorizontalSwipe(view, -swipeStack.width + view.x, -rotateDegreess, duration)
                 .setListener(object : AnimationUtil.AnimationEndListener() {
                     override fun onAnimationEnd(animation: Animator) {
                         swipeStack.onViewSwipedToLeft()
@@ -125,12 +113,7 @@ class SwipeHelper(private val swipeStack: StackManager) : AbstractSwiper() {
         if (!listenForTouchEvents) return
         listenForTouchEvents = false
         observedView?.let { view ->
-            view.animate().cancel()
-            view.animate()
-                .x(swipeStack.width + view.x)
-                .rotation(rotateDegreess)
-                .alpha(0f)
-                .setDuration(duration.toLong())
+            swipesAnimator.animateHorizontalSwipe(view, swipeStack.width + view.x, rotateDegreess, duration)
                 .setListener(object : AnimationUtil.AnimationEndListener() {
                     override fun onAnimationEnd(animation: Animator) {
                         swipeStack.onViewSwipedToRight()
