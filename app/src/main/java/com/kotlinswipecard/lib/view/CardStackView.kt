@@ -8,7 +8,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.kotlinswipecard.CardStackManager
 import com.kotlinswipecard.R
 import com.kotlinswipecard.lib.swipe.SwipeHelper
 import java.util.Random
@@ -53,7 +52,7 @@ class CardStackView @JvmOverloads constructor(
 
     private fun initialize() {
 
-        if (layoutManager == null) layoutManager = CardStackManager(context)
+        //if (layoutManager == null) layoutManager = CardStackManager(context)
 
         random = Random()
         clipToPadding = false
@@ -144,7 +143,7 @@ class CardStackView @JvmOverloads constructor(
 
 
     override fun setAdapter(adapter: Adapter<*>?) {
-        if (layoutManager == null) layoutManager = CardStackManager(context)
+        //if (layoutManager == null) layoutManager = CardStackManager(context)
 
         super.setAdapter(adapter)
     }

@@ -6,9 +6,13 @@ import java.util.Stack
 
 abstract class StackAdapter<T>(private val stack: Stack<T>) :
     RecyclerView.Adapter<StackAdapter.ViewHolder>() {
-    abstract class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    private var currentElement: T? = null
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     override fun getItemCount(): Int = stack.size
+
 
     val isEmpty: Boolean
         get() = stack.isEmpty()
