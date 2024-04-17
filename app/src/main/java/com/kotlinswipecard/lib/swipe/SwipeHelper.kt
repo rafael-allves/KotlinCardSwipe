@@ -5,7 +5,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.kotlinswipecard.lib.animations.AnimationUtil
 import com.kotlinswipecard.lib.animations.SwipesAnimator
-import com.kotlinswipecard.CardStackView
+import com.kotlinswipecard.lib.view.CardStackView
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min

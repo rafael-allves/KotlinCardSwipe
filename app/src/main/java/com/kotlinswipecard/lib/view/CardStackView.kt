@@ -1,4 +1,4 @@
-package com.kotlinswipecard
+package com.kotlinswipecard.lib.view
 
 import android.content.Context
 import android.database.DataSetObserver
@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.kotlinswipecard.CardStackManager
+import com.kotlinswipecard.R
 import com.kotlinswipecard.lib.swipe.SwipeHelper
 import java.util.Random
 
