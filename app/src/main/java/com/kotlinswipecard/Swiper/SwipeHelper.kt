@@ -5,12 +5,12 @@ import android.view.MotionEvent
 import android.view.View
 import com.kotlinswipecard.Animator.AnimationUtil
 import com.kotlinswipecard.Animator.SwipesAnimator
-import com.kotlinswipecard.StackManager
+import com.kotlinswipecard.CardStackView
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-class SwipeHelper(private val swipeStack: StackManager) : AbstractSwiper() {
+class SwipeHelper(private val swipeStack: CardStackView) : AbstractSwiper() {
     private var downX: Float = 0f
     private var downY: Float = 0f
     private var pointerId: Int = 0

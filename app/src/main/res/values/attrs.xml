@@ -20,6 +20,6 @@
         <attr name="swipe_rotation" format="float" />
         <attr name="swipe_opacity" format="float" />
         <attr name="scale_factor" format="float" />
-        <attr name="disable_h2_acceleration" format="boolean" />
+        <attr name="disable_hw_acceleration" format="boolean" />
     </declare-styleable>
 </resources>

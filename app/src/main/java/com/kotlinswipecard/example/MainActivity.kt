@@ -9,11 +9,11 @@ import android.widget.TextView
 import com.kotlinswipecard.CardStackManager
 import com.kotlinswipecard.CardStackView
 import com.kotlinswipecard.R
-import com.kotlinswipecard.StackManager
+import com.kotlinswipecard.StackAdapter
 
 class MainActivity : Activity() {
     private var cardStackView: CardStackView? = null
-    private val cards: StackManager<CardModel> = StackManager()
+    private val cards: StackAdapter<CardModel> = StackAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

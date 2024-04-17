@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.kotlinswipecard.StackManager
-import java.util.Stack
+import com.kotlinswipecard.StackAdapter
 
 class CardStackAdapter<T>(
-    private val items: StackManager<CardModel>,
+    private val items: StackAdapter<CardModel>,
     private val configurator: CardAdapterInterface<T>
 ) : RecyclerView.Adapter<CardStackAdapter<T>.CardViewHolder>() {
 
