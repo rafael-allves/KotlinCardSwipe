@@ -1,10 +1,11 @@
-package com.kotlinswipecard.Animator
+package com.kotlinswipecard.Swiper
 
 import android.animation.Animator
 import android.view.MotionEvent
 import android.view.View
 
 import android.view.animation.OvershootInterpolator
+import com.kotlinswipecard.Animator.AnimationUtil
 import com.kotlinswipecard.StackManager
 import kotlin.math.abs
 import kotlin.math.max
