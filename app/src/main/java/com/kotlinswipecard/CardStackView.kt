@@ -8,7 +8,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.kotlinswipecard.Swiper.SwipeHelper
+import com.kotlinswipecard.lib.swipe.SwipeHelper
 import java.util.Random
 
 class CardStackView @JvmOverloads constructor(

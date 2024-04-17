@@ -1,4 +1,4 @@
-package com.kotlinswipecard.Animator
+package com.kotlinswipecard.lib.animations
 
 import android.view.View
 import android.view.ViewPropertyAnimator
