@@ -12,7 +12,6 @@ class CardStackManager(context: Context): RecyclerView.LayoutManager() {
         )
     }
 
-
     override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
         detachAndScrapAttachedViews(recycler)
 
@@ -24,7 +23,7 @@ class CardStackManager(context: Context): RecyclerView.LayoutManager() {
             val width = getDecoratedMeasuredWidth(view)
             val height = getDecoratedMeasuredHeight(view)
             layoutDecorated(view, 0, yOffset, width, yOffset + height)
-            yOffset += height // Stack vertically, offset each card slightly
+            yOffset += height
         }
     }
 

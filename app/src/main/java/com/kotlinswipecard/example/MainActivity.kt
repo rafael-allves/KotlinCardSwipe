@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.kotlinswipecard.CardStackManager
@@ -18,8 +19,27 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initialize()
+    }
+
+    private fun initialize() {
         populateStack()
         setupCardStackView()
+        findViewById<Button>(R.id.like_button).setOnClickListener {
+            Log.d(
+                "MainActivity",
+                cards.push(
+                    CardModel(
+                        "Olá, mundo",
+                        30,
+                        "https://images.pexels.com/photos/20588094/pexels-photo-20588094.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                    ), cardStackView?.adapter
+                ).name
+            )
+        }
+        findViewById<Button>(R.id.dislike_button).setOnClickListener {
+            Log.d("MainActivity", cards.pop(cardStackView?.adapter).name)
+        }
     }
 
     private fun setupCardStackView() {
