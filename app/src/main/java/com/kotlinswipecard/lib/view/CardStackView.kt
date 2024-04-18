@@ -7,7 +7,6 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.R
 import com.kotlinswipecard.lib.swipe.SwipeHelper
 import java.util.Random
@@ -16,7 +15,7 @@ class CardStackView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
-) : RecyclerView(context, attrs, defStyle) {
+) : AbstractCardStackView(context, attrs, defStyle) {
 
     private var animationStyle: String? = null
     private var stackOrientation: Int = 0
@@ -84,7 +83,7 @@ class CardStackView @JvmOverloads constructor(
     override fun onRestoreInstanceState(state: Parcelable?) {
         var mState: Parcelable? = state
 
-        if(state is Bundle){
+        if (state is Bundle) {
             val bundle = state
             currentViewIndex = bundle.getInt(KEY_CURRENT_INDEX)
             mState = bundle.getParcelable(KEY_SUPER_STATE)
@@ -94,7 +93,7 @@ class CardStackView @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if(adapter == null || adapter!!.isEmpty){
+        if (adapter == null || adapter!!.isEmpty) {
             currentViewIndex = 0
             removeAllViewsInLayout()
         }
