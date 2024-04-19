@@ -10,6 +10,8 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.R
+import com.kotlinswipecard.lib.listeners.SwipeProgressListener
+import com.kotlinswipecard.lib.listeners.SwipeStackListener
 import org.jetbrains.annotations.Nullable
 import java.util.Random
 import kotlin.math.pow
@@ -36,7 +38,7 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
     protected var swipeRotation = 0f
     protected var swipeOpacity = 0f
 
-    protected var listener: SwipeStackListener? = null
+    protected var swipeStackListener: SwipeStackListener? = null
     protected var progressListener: SwipeProgressListener? = null
 
     protected val random: Random = Random()

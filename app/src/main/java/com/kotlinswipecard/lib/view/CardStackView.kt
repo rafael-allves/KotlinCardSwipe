@@ -118,10 +118,10 @@ class CardStackView @JvmOverloads constructor(
             adapter!!.pop()
 
         if (childCount == DEFAULT_STACK_SIZE / 2)
-            listener!!.onStackMid()
+            swipeStackListener!!.onStackMid()
 
-        if (childCount == 0 && listener != null)
-            listener!!.onStackEmpty()
+        if (childCount == 0 && swipeStackListener != null)
+            swipeStackListener!!.onStackEmpty()
     }
 
     fun resetStack() {
@@ -131,37 +131,27 @@ class CardStackView @JvmOverloads constructor(
     }
 
     fun onSwipeStart() {
-        progressListener?.let { listener ->
-            listener.onSwipeStart(currentPosition)
-        }
+        progressListener?.onSwipeStart(currentPosition)
     }
 
     fun onSwipeProgress(progress: Float) {
-        progressListener?.let { listener ->
-            listener.onSwipeProgress(
-                currentPosition,
-                progress
-            )
-        }
+        progressListener?.onSwipeProgress(
+            currentPosition,
+            progress
+        )
     }
 
     fun onSwipeEnd() {
-        progressListener?.let { listener ->
-            listener.onSwipeEnd(currentPosition)
-        }
+        progressListener?.onSwipeEnd(currentPosition)
     }
 
     fun onViewSwipedToLeft() {
-        progressListener?.let { listener ->
-            listener.onViewSwipedToLeft(currentPosition)
-        }
+        swipeStackListener?.onViewSwipedToLeft(currentPosition)
         removeTopView()
     }
 
     fun onViewSwipedToRight() {
-        progressListener?.let {
-            listener.onViewsSwipedToRight(currentPosition)
-        }
+        swipeStackListener?.onViewSwipedToRight(currentPosition)
         removeTopView()
     }
 
