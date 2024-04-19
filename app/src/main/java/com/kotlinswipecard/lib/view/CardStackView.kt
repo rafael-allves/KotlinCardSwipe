@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import com.kotlinswipecard.R
+import com.kotlinswipecard.lib.animations.SwipesAnimator
 import com.kotlinswipecard.lib.swipe.SwipeHelper
 import java.util.Random
 
@@ -103,27 +104,31 @@ class CardStackView @JvmOverloads constructor(
     }
 
     private fun reorderItems() {
+        val topViewIndex = childCount - 1
+        val midWidth = width / 2
+
         for (x in 0 until childCount) {
             val childView = getChildAt(x)
-            val topViewIndex = childCount - 1
-            val distanceToViewAbove = topViewIndex * viewSpacing - x * viewSpacing
-            val newPositionX = (width - childView.measuredWidth) / 2
+            val distanceToViewAbove = (topViewIndex - x) * viewSpacing
+            val newPositionX = midWidth - childView.measuredWidth / 2
             val newPositionY = distanceToViewAbove + paddingTop
 
-            childView.layout(
-                newPositionX,
-                paddingTop,
-                newPositionX + childView.measuredWidth,
-                paddingTop + childView.measuredHeight
-            )
+            childView.apply {
+                layout(
+                    newPositionX,
+                    paddingTop,
+                    newPositionX + measuredWidth,
+                    paddingTop + measuredHeight
+                )
+                translationZ = x.toFloat()
+                y = newPositionY.toFloat()
+                scaleY = calculateScaleFactor(childCount - x)
+                scaleX = scaleY
+                alpha = if (childView.isNewView()) 0f else alpha
+                setTag(R.id.new_view, false)
+            }
 
-            childView.translationZ = x.toFloat()
-
-            val isNewView = childView.getTag(R.id.new_view) as Boolean
-            val scaleFactor =
-                Math.pow(scaleFactor.toDouble(), (childCount - x).toDouble()).toFloat()
-
-            if(x == topViewIndex)
+            if (x == topViewIndex) {
                 swipeHelper?.let { helper ->
                     helper.unRegisterObservedView()
                     topView = childView
@@ -133,22 +138,18 @@ class CardStackView @JvmOverloads constructor(
                         newPositionY.toFloat()
                     )
                 }
-
-            if(!isFirstLayout){
-                if(isNewView){
-                    childView.setTag(R.id.new_view, false)
-                    childView.alpha = 0f
-                    childView.y = newPositionY.toFloat()
-                    childView.scaleY = scaleFactor
-                    childView.scaleX = scaleFactor
-                }
-                childView.animate()
-                    .y(newPositionY.toFloat())
-                    .scaleX(scaleFactor)
-                    .scaleY(scaleFactor)
-                    .alpha(1f).duration = animationDuration.toLong()
             }
 
+            if (!isFirstLayout) {
+                if (childView.isNewView())
+                    childView.alpha = 0f
+                SwipesAnimator.animateViewScale(
+                    childView,
+                    childView.scaleY,
+                    newPositionY.toFloat(),
+                    animationDuration
+                )
+            }
         }
     }
 

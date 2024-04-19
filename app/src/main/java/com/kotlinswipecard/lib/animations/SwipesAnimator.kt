@@ -53,4 +53,12 @@ object SwipesAnimator {
             .alpha(0f)
             .setDuration(duration.toLong())
     }
+
+    fun animateViewScale(view: View, scaleFactor: Float, positionY: Float, animationDuration: Int) {
+        view.animate()
+            .y(positionY)
+            .scaleX(scaleFactor)
+            .scaleY(scaleFactor)
+            .alpha(1f).duration = animationDuration.toLong()
+    }
 }

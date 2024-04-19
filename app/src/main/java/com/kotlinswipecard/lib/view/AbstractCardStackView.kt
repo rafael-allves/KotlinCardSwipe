@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.R
 
@@ -98,6 +99,10 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
         }
     }
 
+    protected fun View.isNewView(): Boolean = getTag(R.id.new_view) as? Boolean ?: false
+
+    protected fun calculateScaleFactor(position: Int): Float =
+        Math.pow(scaleFactor.toDouble(), position.toDouble()).toFloat()
 
     override fun setAdapter(adapter: Adapter<*>?) {
         if (!(adapter is StackAdapter<*>)) {
