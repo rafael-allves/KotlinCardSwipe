@@ -14,7 +14,6 @@ class SwipeHelper(private val swipeStack: CardStackView) : AbstractSwiper() {
     private var downX: Float = 0f
     private var downY: Float = 0f
     private var pointerId: Int = 0
-    private val swipesAnimator: SwipesAnimator = SwipesAnimator()
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         when (event?.action) {
@@ -93,14 +92,19 @@ class SwipeHelper(private val swipeStack: CardStackView) : AbstractSwiper() {
     }
 
     private fun resetViewPosition() {
-        swipesAnimator.animateResetPosition(observedView!!, initialX, initialY, animationDuration)
+        SwipesAnimator.animateResetPosition(observedView!!, initialX, initialY, animationDuration)
     }
 
     private fun swipeViewToLeft(duration: Int) {
         if (!listenForTouchEvents) return
         listenForTouchEvents = false
         observedView?.let { view ->
-            swipesAnimator.animateHorizontalSwipe(view, -swipeStack.width + view.x, -rotateDegreess, duration)
+            swipesAnimator.animateHorizontalSwipe(
+                view,
+                -swipeStack.width + view.x,
+                -rotateDegreess,
+                duration
+            )
                 .setListener(object : AnimationUtil.AnimationEndListener() {
                     override fun onAnimationEnd(animation: Animator) {
                         swipeStack.onViewSwipedToLeft()
@@ -113,7 +117,12 @@ class SwipeHelper(private val swipeStack: CardStackView) : AbstractSwiper() {
         if (!listenForTouchEvents) return
         listenForTouchEvents = false
         observedView?.let { view ->
-            swipesAnimator.animateHorizontalSwipe(view, swipeStack.width + view.x, rotateDegreess, duration)
+            SwipesAnimator.animateHorizontalSwipe(
+                view,
+                swipeStack.width + view.x,
+                rotateDegreess,
+                duration
+            )
                 .setListener(object : AnimationUtil.AnimationEndListener() {
                     override fun onAnimationEnd(animation: Animator) {
                         swipeStack.onViewSwipedToRight()

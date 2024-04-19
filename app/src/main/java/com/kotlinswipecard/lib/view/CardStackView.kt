@@ -2,7 +2,6 @@ package com.kotlinswipecard.lib.view
 
 import android.content.Context
 import android.database.DataSetObserver
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -104,7 +103,7 @@ class CardStackView @JvmOverloads constructor(
     }
 
     private fun reorderItems() {
-        for(x in 0 until childCount){
+        for (x in 0 until childCount) {
             val childView = getChildAt(x)
             val topViewIndex = childCount - 1
             val distanceToViewAbove = topViewIndex * viewSpacing - x * viewSpacing
@@ -118,8 +117,37 @@ class CardStackView @JvmOverloads constructor(
                 paddingTop + childView.measuredHeight
             )
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                childView.translationZ = x.toFloat()
+            childView.translationZ = x.toFloat()
+
+            val isNewView = childView.getTag(R.id.new_view) as Boolean
+            val scaleFactor =
+                Math.pow(scaleFactor.toDouble(), (childCount - x).toDouble()).toFloat()
+
+            if(x == topViewIndex)
+                swipeHelper?.let { helper ->
+                    helper.unRegisterObservedView()
+                    topView = childView
+                    helper.registerObservedView(
+                        topView,
+                        newPositionX.toFloat(),
+                        newPositionY.toFloat()
+                    )
+                }
+
+            if(!isFirstLayout){
+                if(isNewView){
+                    childView.setTag(R.id.new_view, false)
+                    childView.alpha = 0f
+                    childView.y = newPositionY.toFloat()
+                    childView.scaleY = scaleFactor
+                    childView.scaleX = scaleFactor
+                }
+                childView.animate()
+                    .y(newPositionY.toFloat())
+                    .scaleX(scaleFactor)
+                    .scaleY(scaleFactor)
+                    .alpha(1f).duration = animationDuration.toLong()
+            }
 
         }
     }

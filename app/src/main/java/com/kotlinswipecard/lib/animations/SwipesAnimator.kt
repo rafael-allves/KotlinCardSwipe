@@ -8,7 +8,7 @@ import android.view.animation.OvershootInterpolator
  * A class that provides animation functionalities for swiping actions on views.
  * This includes resetting the view's position as well as animating horizontal swipes.
  */
-class SwipesAnimator {
+object SwipesAnimator {
 
     /**
      * Animates the view back to its initial position with default properties reset.
