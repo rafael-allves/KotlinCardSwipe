@@ -2,6 +2,7 @@ package com.kotlinswipecard.lib.view
 
 import android.content.Context
 import android.database.DataSetObserver
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -99,6 +100,27 @@ class CardStackView @JvmOverloads constructor(
                 configureViewProperties(view)
                 addConfiguredViewToLayout(view)
             }
+        }
+    }
+
+    private fun reorderItems() {
+        for(x in 0 until childCount){
+            val childView = getChildAt(x)
+            val topViewIndex = childCount - 1
+            val distanceToViewAbove = topViewIndex * viewSpacing - x * viewSpacing
+            val newPositionX = (width - childView.measuredWidth) / 2
+            val newPositionY = distanceToViewAbove + paddingTop
+
+            childView.layout(
+                newPositionX,
+                paddingTop,
+                newPositionX + childView.measuredWidth,
+                paddingTop + childView.measuredHeight
+            )
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                childView.translationZ = x.toFloat()
+
         }
     }
 
