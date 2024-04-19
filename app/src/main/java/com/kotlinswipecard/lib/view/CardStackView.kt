@@ -28,7 +28,7 @@ class CardStackView @JvmOverloads constructor(
     }
 
     private fun initialize() {
-        if (layoutManager == null) layoutManager = CardStackManager(context)
+        //if (layoutManager == null) layoutManager = CardStackManager(context)
 
         clipToPadding = false
         clipChildren = false
@@ -124,6 +124,12 @@ class CardStackView @JvmOverloads constructor(
             listener!!.onStackEmpty()
     }
 
+    fun resetStack() {
+        currentViewIndex = 0
+        removeAllViewsInLayout()
+        requestLayout()
+    }
+
     fun onSwipeStart() {
         progressListener?.let { listener ->
             listener.onSwipeStart(currentPosition)
@@ -136,6 +142,12 @@ class CardStackView @JvmOverloads constructor(
                 currentPosition,
                 progress
             )
+        }
+    }
+
+    fun onSwipeEnd() {
+        progressListener?.let { listener ->
+            listener.onSwipeEnd(currentPosition)
         }
     }
 

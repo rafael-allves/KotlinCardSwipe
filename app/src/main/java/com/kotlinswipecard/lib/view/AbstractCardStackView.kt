@@ -117,11 +117,19 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
             Log.e("CardStackView", "Failed to set adapter: $errorDetails")
             throw IllegalArgumentException(errorDetails)
         }
-        super.setAdapter(adapter)
+
+        if(this.adapter != null) this.adapter!!.unregisterAdapterDataObserver()
+        this.adapter = adapter
+        this.adapter!!.registerAdapterDataObserver()
+
     }
 
     fun setListener(listener: SwipeStackListener?) {
         this.listener = listener
+    }
+
+    fun setSwipeProgressListener(listener: SwipeProgressListener?){
+        progressListener = listener
     }
 
     override fun onSaveInstanceState(): Parcelable {
