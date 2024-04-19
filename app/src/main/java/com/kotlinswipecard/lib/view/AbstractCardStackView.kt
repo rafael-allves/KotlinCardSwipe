@@ -109,27 +109,6 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
         super.setAdapter(adapter)
     }
 
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (adapter == null || adapter!!.isEmpty) {
-            currentViewIndex = 0
-            removeAllViewsInLayout()
-        }
-        var x = childCount
-        while(x < numberOfStackedViews && currentViewIndex < adapter!!.count){
-            addNextView()
-            ++x
-        }
-        reorderItems()
-
-        isFirstLayout = false
-    }
-
-    private fun addNextView() {
-        if(currentViewIndex < adapter!!.count){
-            val bottomVIew = adapter.getView(currentViewIndex, this, this)
-        }
-    }
-
     override fun onSaveInstanceState(): Parcelable {
         val bundle = Bundle()
         bundle.putParcelable(KEY_SUPER_STATE, super.onSaveInstanceState())

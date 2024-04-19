@@ -7,14 +7,14 @@ import java.util.Stack
 abstract class StackAdapter<T>(private val stack: Stack<T>) :
     RecyclerView.Adapter<StackAdapter<T>.ViewHolder>() {
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+        val contentView: View = view;
+    }
 
     private var _currentElement: T? = null
 
     val currentElement: T?
         get() = _currentElement
-
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     val isEmpty: Boolean
         get() = stack.isEmpty()
