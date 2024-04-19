@@ -5,17 +5,22 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.Stack
 
 abstract class StackAdapter<T>(private val stack: Stack<T>) :
-    RecyclerView.Adapter<StackAdapter.ViewHolder>() {
+    RecyclerView.Adapter<StackAdapter<T>.ViewHolder>() {
 
-    private var currentElement: T? = null
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    private var _currentElement: T? = null
 
-    override fun getItemCount(): Int = stack.size
+    val currentElement: T?
+        get() = _currentElement
 
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     val isEmpty: Boolean
         get() = stack.isEmpty()
+
+    val count: Int
+        get() = stack.size
 
     fun push(item: T) {
         stack.push(item)
