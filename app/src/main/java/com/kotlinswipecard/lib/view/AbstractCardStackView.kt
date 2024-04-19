@@ -7,8 +7,12 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.R
+import org.jetbrains.annotations.Nullable
+import java.util.Random
+import kotlin.math.pow
 
 abstract class AbstractCardStackView @JvmOverloads constructor(
     context: Context,
@@ -21,19 +25,21 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
 
     protected var numberOfStackedViews = 0
     protected var viewSpacing = 0
-    protected var viewRotation = 0
-    protected var disableHwAcceleration = false
+    private var viewRotation = 0
+    private var disableHwAcceleration = false
     protected var isFirstLayout = true
 
     protected var animationDuration = 0
 
-    protected var scaleFactor = 0f
+    private var scaleFactor = 0f
 
     protected var swipeRotation = 0f
     protected var swipeOpacity = 0f
 
     protected var listener: SwipeStackListener? = null
     protected var progressListener: SwipeProgressListener? = null
+
+    protected val random: Random = Random()
 
     var allowedSwipeDirections = 0
 
@@ -102,7 +108,7 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
     protected fun View.isNewView(): Boolean = getTag(R.id.new_view) as? Boolean ?: false
 
     protected fun calculateScaleFactor(position: Int): Float =
-        Math.pow(scaleFactor.toDouble(), position.toDouble()).toFloat()
+        scaleFactor.toDouble().pow(position.toDouble()).toFloat()
 
     override fun setAdapter(adapter: Adapter<*>?) {
         if (!(adapter is StackAdapter<*>)) {
@@ -112,6 +118,10 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
             throw IllegalArgumentException(errorDetails)
         }
         super.setAdapter(adapter)
+    }
+
+    fun setListener(listener: SwipeStackListener?) {
+        this.listener = listener
     }
 
     override fun onSaveInstanceState(): Parcelable {
@@ -125,9 +135,8 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
         var mState: Parcelable? = state
 
         if (state is Bundle) {
-            val bundle = state
-            currentViewIndex = bundle.getInt(KEY_CURRENT_INDEX)
-            mState = bundle.getParcelable(KEY_SUPER_STATE)
+            currentViewIndex = state.getInt(KEY_CURRENT_INDEX)
+            mState = state.getParcelable(KEY_SUPER_STATE)
         }
 
         super.onRestoreInstanceState(mState)
@@ -136,5 +145,62 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
 
     override fun onInterceptTouchEvent(e: MotionEvent?): Boolean {
         return super.onInterceptTouchEvent(e)
+    }
+
+    private fun configureViewDimensions(view: View) {
+        val width = width - (paddingLeft + paddingRight)
+        val height = height - (paddingTop + paddingBottom)
+        val params = view.layoutParams ?: FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        val measureSpecWidth =
+            if (params.width == FrameLayout.LayoutParams.MATCH_PARENT) MeasureSpec.EXACTLY
+            else MeasureSpec.AT_MOST
+        val measureSpecHeight =
+            if (params.height == FrameLayout.LayoutParams.MATCH_PARENT) MeasureSpec.EXACTLY
+            else MeasureSpec.AT_MOST
+        view.measure(
+            MeasureSpec.makeMeasureSpec(width, measureSpecWidth),
+            MeasureSpec.makeMeasureSpec(height, measureSpecHeight)
+        )
+    }
+
+    private fun configureViewProperties(view: View) {
+        view.setTag(R.id.new_view, true)
+        if (disableHwAcceleration)
+            view.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+
+        if (viewRotation > 0)
+            view.rotation = ((Random().nextInt(viewRotation) - viewRotation) / 2).toFloat()
+    }
+
+    private fun addConfiguredViewToLayout(view: View) {
+        val params = view.layoutParams ?: FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        addViewInLayout(view, 0, params, true)
+        currentViewIndex++
+    }
+
+    protected fun addNextView() {
+        val adapterCount = adapter?.count ?: return
+        if (currentViewIndex < adapterCount) {
+            val viewHolder =
+                findViewHolderForAdapterPosition(currentViewIndex) as? StackAdapter<*>.ViewHolder
+            viewHolder?.contentView?.let { view ->
+                configureViewDimensions(view)
+                configureViewProperties(view)
+                addConfiguredViewToLayout(view)
+            }
+        }
+    }
+
+    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+        setMeasuredDimension(
+            MeasureSpec.getSize(widthSpec),
+            MeasureSpec.getSize(heightSpec)
+        )
     }
 }

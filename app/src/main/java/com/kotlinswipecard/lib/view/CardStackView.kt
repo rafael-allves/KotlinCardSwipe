@@ -4,11 +4,9 @@ import android.content.Context
 import android.database.DataSetObserver
 import android.util.AttributeSet
 import android.view.View
-import android.widget.FrameLayout
 import com.kotlinswipecard.R
 import com.kotlinswipecard.lib.animations.SwipesAnimator
 import com.kotlinswipecard.lib.swipe.SwipeHelper
-import java.util.Random
 
 class CardStackView @JvmOverloads constructor(
     context: Context,
@@ -17,8 +15,6 @@ class CardStackView @JvmOverloads constructor(
 ) : AbstractCardStackView(context, attrs, defStyle) {
 
     private var stackOrientation: Int = 0
-
-    private var random: Random? = null
 
     var topView: View? = null
         private set
@@ -34,7 +30,6 @@ class CardStackView @JvmOverloads constructor(
     private fun initialize() {
         if (layoutManager == null) layoutManager = CardStackManager(context)
 
-        random = Random()
         clipToPadding = false
         clipChildren = false
         swipeHelper = SwipeHelper(this)
@@ -49,56 +44,6 @@ class CardStackView @JvmOverloads constructor(
                     invalidate()
                     requestLayout()
                 }
-            }
-        }
-    }
-
-    private fun configureViewDimensions(view: View) {
-        val width = width - (paddingLeft + paddingRight)
-        val height = height - (paddingTop + paddingBottom)
-        val params = view.layoutParams ?: FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT
-        )
-        val measureSpecWidth =
-            if (params.width == FrameLayout.LayoutParams.MATCH_PARENT) MeasureSpec.EXACTLY
-            else MeasureSpec.AT_MOST
-        val measureSpecHeight =
-            if (params.height == FrameLayout.LayoutParams.MATCH_PARENT) MeasureSpec.EXACTLY
-            else MeasureSpec.AT_MOST
-        view.measure(
-            MeasureSpec.makeMeasureSpec(width, measureSpecWidth),
-            MeasureSpec.makeMeasureSpec(height, measureSpecHeight)
-        )
-    }
-
-    private fun configureViewProperties(view: View) {
-        view.setTag(R.id.new_view, true)
-        if (disableHwAcceleration)
-            view.setLayerType(View.LAYER_TYPE_HARDWARE, null)
-
-        if (viewRotation > 0)
-            view.rotation = ((Random().nextInt(viewRotation) - viewRotation) / 2).toFloat()
-    }
-
-    private fun addConfiguredViewToLayout(view: View) {
-        val params = view.layoutParams ?: FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT
-        )
-        addViewInLayout(view, 0, params, true)
-        currentViewIndex++
-    }
-
-    private fun addNextView() {
-        val adapterCount = adapter?.count ?: return
-        if (currentViewIndex < adapterCount) {
-            val viewHolder =
-                findViewHolderForAdapterPosition(currentViewIndex) as? StackAdapter<*>.ViewHolder
-            viewHolder?.contentView?.let { view ->
-                configureViewDimensions(view)
-                configureViewProperties(view)
-                addConfiguredViewToLayout(view)
             }
         }
     }
@@ -167,4 +112,46 @@ class CardStackView @JvmOverloads constructor(
 
         isFirstLayout = false
     }
+
+    private fun removeTopView() {
+        if (topView != null)
+            adapter!!.pop()
+
+        if (childCount == DEFAULT_STACK_SIZE / 2)
+            listener!!.onStackMid()
+
+        if (childCount == 0 && listener != null)
+            listener!!.onStackEmpty()
+    }
+
+    fun onSwipeStart() {
+        progressListener?.let { listener ->
+            listener.onSwipeStart(currentPosition)
+        }
+    }
+
+    fun onSwipeProgress(progress: Float) {
+        progressListener?.let { listener ->
+            listener.onSwipeProgress(
+                currentPosition,
+                progress
+            )
+        }
+    }
+
+    fun onViewSwipedToLeft() {
+        progressListener?.let { listener ->
+            listener.onViewSwipedToLeft(currentPosition)
+        }
+        removeTopView()
+    }
+
+    fun onViewSwipedToRight() {
+        progressListener?.let {
+            listener.onViewsSwipedToRight(currentPosition)
+        }
+        removeTopView()
+    }
+
+
 }
