@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.DataSetObserver
 import android.util.AttributeSet
 import android.view.View
+import android.widget.FrameLayout
 import com.kotlinswipecard.R
 import com.kotlinswipecard.lib.swipe.SwipeHelper
 import java.util.Random
@@ -14,7 +15,6 @@ class CardStackView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : AbstractCardStackView(context, attrs, defStyle) {
 
-    private var animationStyle: String? = null
     private var stackOrientation: Int = 0
 
     private var random: Random? = null
@@ -31,7 +31,8 @@ class CardStackView @JvmOverloads constructor(
     }
 
     private fun initialize() {
-        //if (layoutManager == null) layoutManager = CardStackManager(context)
+        if (layoutManager == null) layoutManager = CardStackManager(context)
+
         random = Random()
         clipToPadding = false
         clipChildren = false
@@ -51,20 +52,52 @@ class CardStackView @JvmOverloads constructor(
         }
     }
 
+    private fun configureViewDimensions(view: View) {
+        val width = width - (paddingLeft + paddingRight)
+        val height = height - (paddingTop + paddingBottom)
+        val params = view.layoutParams ?: FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        val measureSpecWidth =
+            if (params.width == FrameLayout.LayoutParams.MATCH_PARENT) MeasureSpec.EXACTLY
+            else MeasureSpec.AT_MOST
+        val measureSpecHeight =
+            if (params.height == FrameLayout.LayoutParams.MATCH_PARENT) MeasureSpec.EXACTLY
+            else MeasureSpec.AT_MOST
+        view.measure(
+            MeasureSpec.makeMeasureSpec(width, measureSpecWidth),
+            MeasureSpec.makeMeasureSpec(height, measureSpecHeight)
+        )
+    }
+
+    private fun configureViewProperties(view: View) {
+        view.setTag(R.id.new_view, true)
+        if (disableHwAcceleration)
+            view.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+
+        if (viewRotation > 0)
+            view.rotation = ((Random().nextInt(viewRotation) - viewRotation) / 2).toFloat()
+    }
+
+    private fun addConfiguredViewToLayout(view: View) {
+        val params = view.layoutParams ?: FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        addViewInLayout(view, 0, params, true)
+        currentViewIndex++
+    }
+
     private fun addNextView() {
-        if(currentViewIndex < adapter!!.count){
-            val viewHolder = findViewHolderForAdapterPosition(currentViewIndex) as? StackAdapter<*>.ViewHolder
-            val bottomView = viewHolder?.contentView
-
-            bottomView?.let { view ->
-                view.setTag(R.id.new_view, true)
-
-                if(disableHwAcceleration)
-                    view.setLayerType(LAYER_TYPE_HARDWARE, null)
-
-                if(viewRotation > 0)
-                    view.rotation =
-                        (random!!.nextInt(viewRotation) - viewRotation / 2).toFloat()
+        val adapterCount = adapter?.count ?: return
+        if (currentViewIndex < adapterCount) {
+            val viewHolder =
+                findViewHolderForAdapterPosition(currentViewIndex) as? StackAdapter<*>.ViewHolder
+            viewHolder?.contentView?.let { view ->
+                configureViewDimensions(view)
+                configureViewProperties(view)
+                addConfiguredViewToLayout(view)
             }
         }
     }
@@ -75,7 +108,7 @@ class CardStackView @JvmOverloads constructor(
             removeAllViewsInLayout()
         }
         var x = childCount
-        while(x < numberOfStackedViews && currentViewIndex < adapter!!.count){
+        while (x < numberOfStackedViews && currentViewIndex < adapter!!.count) {
             addNextView()
             ++x
         }
