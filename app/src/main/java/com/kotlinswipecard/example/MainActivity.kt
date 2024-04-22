@@ -3,7 +3,6 @@ package com.kotlinswipecard.example
 import android.app.Activity
 import android.os.Bundle
 import com.kotlinswipecard.R
-import com.kotlinswipecard.lib.view.CardStackView
 import java.util.Stack
 
 class MainActivity : Activity() {
