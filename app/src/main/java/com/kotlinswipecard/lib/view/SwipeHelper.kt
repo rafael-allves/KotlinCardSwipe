@@ -1,13 +1,14 @@
 package com.kotlinswipecard.lib.view
 
 import android.graphics.Canvas
+import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.kotlinswipecard.lib.config.StackDirection
 import com.kotlinswipecard.lib.config.SwipeDirection
 import com.kotlinswipecard.lib.config.SwiperConfig
 import com.kotlinswipecard.lib.listeners.SwipeStackListener
 import com.kotlinswipecard.lib.utils.scaleForPosition
-import com.kotlinswipecard.lib.utils.translateForPosition
 import com.kotlinswipecard.lib.utils.xThreshold
 import com.kotlinswipecard.lib.utils.yThreshold
 import kotlin.math.absoluteValue
@@ -41,6 +42,25 @@ class SwipeHelper(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         listener.onSwiped(viewHolder, direction)
+    }
+
+    private fun translateForPosition(view: View, config: SwiperConfig, pos: Int, ratio: Float) {
+        val translation = config.itemTranslate
+        view.apply {
+            when (config.stackDirection) {
+                StackDirection.Left -> translationX =
+                    -(pos - ratio.absoluteValue) * measuredWidth * translation
+
+                StackDirection.Up -> translationY =
+                    -(pos - ratio.absoluteValue) * measuredHeight * translation
+
+                StackDirection.Right -> translationX =
+                    (pos - ratio.absoluteValue) * measuredWidth * translation
+
+                StackDirection.Down -> translationY =
+                    (pos - ratio.absoluteValue) * measuredHeight * translation
+            }
+        }
     }
 
     override fun onChildDraw(
@@ -79,7 +99,7 @@ class SwipeHelper(
             val idx = childCount - pos - 1
             val view = recyclerView.getChildAt(pos)
             view.scaleForPosition(config, idx, ratio)
-            view.translateForPosition(config, idx, ratio)
+            translateForPosition(view, config, idx, ratio)
         }
         listener.onSwipe(viewHolder, dX, dY, direction)
     }
