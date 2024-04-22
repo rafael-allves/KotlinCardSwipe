@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.R
-import com.kotlinswipecard.lib.listeners.SwipeProgressListener
 import com.kotlinswipecard.lib.listeners.SwipeStackListener
 import java.util.Random
 import kotlin.math.pow
