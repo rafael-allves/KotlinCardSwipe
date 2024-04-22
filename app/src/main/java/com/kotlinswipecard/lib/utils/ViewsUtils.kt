@@ -16,20 +16,13 @@ fun View.resetTransitions() {
     translationY = 0f
 }
 
-fun View.translateForPosition(config: SwiperConfig, pos: Int, ratio: Float) {
+fun View.translateForPosition(config: SwiperConfig, pos: Int, ratio: Float){
     val translation = config.itemTranslate
     when (config.stackDirection) {
-        StackDirection.Left -> translationX =
-            -(pos - ratio.absoluteValue) * measuredWidth * translation
-
-        StackDirection.Up -> translationY =
-            -(pos - ratio.absoluteValue) * measuredHeight * translation
-
-        StackDirection.Right -> translationX =
-            (pos - ratio.absoluteValue) * measuredWidth * translation
-
-        StackDirection.Down -> translationY =
-            (pos - ratio.absoluteValue) * measuredHeight * translation
+        StackDirection.Left -> translationX = -(pos - ratio.absoluteValue) * measuredWidth * translation
+        StackDirection.Up -> translationY = -(pos - ratio.absoluteValue) * measuredHeight * translation
+        StackDirection.Right -> translationX = (pos - ratio.absoluteValue) * measuredWidth * translation
+        StackDirection.Down -> translationY = (pos - ratio.absoluteValue) * measuredHeight * translation
     }
 }
 

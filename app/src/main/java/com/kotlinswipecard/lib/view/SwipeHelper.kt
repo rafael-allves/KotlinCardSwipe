@@ -1,4 +1,4 @@
-package com.kotlinswipecard.lib.swipe
+package com.kotlinswipecard.lib.view
 
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -7,9 +7,9 @@ import com.kotlinswipecard.lib.config.SwipeDirection
 import com.kotlinswipecard.lib.config.SwiperConfig
 import com.kotlinswipecard.lib.listeners.SwipeStackListener
 import com.kotlinswipecard.lib.utils.scaleForPosition
+import com.kotlinswipecard.lib.utils.translateForPosition
 import com.kotlinswipecard.lib.utils.xThreshold
 import com.kotlinswipecard.lib.utils.yThreshold
-import com.kotlinswipecard.lib.view.CardStackLayoutManager
 import kotlin.math.absoluteValue
 
 class SwipeHelper(
@@ -59,18 +59,16 @@ class SwipeHelper(
         val direction: Int
         if (dX.absoluteValue > dY.absoluteValue) {
             ratio = ratioX
-            direction = if (dX > 0) {
+            direction = if (dX > 0)
                 SwipeDirection.RIGHT
-            } else {
+            else
                 SwipeDirection.LEFT
-            }
         } else {
             ratio = (dY / recyclerView.yThreshold).coerceIn(-1f, 1f)
-            direction = if (dY > 0) {
+            direction = if (dY > 0)
                 SwipeDirection.DOWN
-            } else {
+            else
                 SwipeDirection.UP
-            }
         }
         itemView.rotation = ratioX * config.itemRotation
 

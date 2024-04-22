@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.lib.config.SwiperConfig
 import com.kotlinswipecard.lib.listeners.SwipeStackListener
-import com.kotlinswipecard.lib.swipe.SwipeHelper
+import com.kotlinswipecard.lib.view.SwipeHelper
 import com.kotlinswipecard.lib.view.CardStackLayoutManager
 
 fun RecyclerView.setupStack(
