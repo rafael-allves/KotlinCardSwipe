@@ -1,7 +1,6 @@
 package com.kotlinswipecard.lib.view
 
 import android.content.Context
-import android.database.DataSetObserver
 import android.util.AttributeSet
 import android.view.View
 import com.kotlinswipecard.R
@@ -20,7 +19,6 @@ class CardStackView @JvmOverloads constructor(
         private set
 
     private var swipeHelper: SwipeHelper? = null
-    private var dataObserver: DataSetObserver? = null
 
     init {
         readAttributes(attrs)
@@ -35,10 +33,10 @@ class CardStackView @JvmOverloads constructor(
         swipeHelper = SwipeHelper(this)
 
         swipeHelper?.let { helper ->
-            helper.setAnimationDuration(animationDuration)
-            helper.setRotation(swipeRotation)
-            helper.setOpacityEnd(swipeOpacity)
-            dataObserver = object : DataSetObserver() {
+            helper.animationDuration = animationDuration
+            helper.rotateDegreess = swipeRotation
+            helper.opacityEnd = swipeOpacity
+            dataObserver = object : AdapterDataObserver() {
                 override fun onChanged() {
                     super.onChanged()
                     invalidate()

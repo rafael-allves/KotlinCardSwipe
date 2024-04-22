@@ -1,5 +1,6 @@
 package com.kotlinswipecard.lib.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.R
 import com.kotlinswipecard.lib.listeners.SwipeProgressListener
 import com.kotlinswipecard.lib.listeners.SwipeStackListener
-import org.jetbrains.annotations.Nullable
 import java.util.Random
 import kotlin.math.pow
 
@@ -30,6 +30,7 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
     private var viewRotation = 0
     private var disableHwAcceleration = false
     protected var isFirstLayout = true
+    protected var dataObserver: AdapterDataObserver? = null
 
     protected var animationDuration = 0
 
@@ -40,8 +41,6 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
 
     protected var swipeStackListener: SwipeStackListener? = null
     protected var progressListener: SwipeProgressListener? = null
-
-    protected val random: Random = Random()
 
     var allowedSwipeDirections = 0
 
@@ -67,6 +66,7 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
         protected val KEY_CURRENT_INDEX = "currentIndex"
     }
 
+    @SuppressLint("CustomViewStyleable")
     protected fun readAttributes(attributeSets: AttributeSet?) {
         val attrs = context.obtainStyledAttributes(attributeSets, R.styleable.CardStackView)
         try {
@@ -120,17 +120,17 @@ abstract class AbstractCardStackView @JvmOverloads constructor(
             throw IllegalArgumentException(errorDetails)
         }
 
-        if(this.adapter != null) this.adapter!!.unregisterAdapterDataObserver()
+        if (this.adapter != null) this.adapter!!.unregisterAdapterDataObserver(dataObserver!!)
         this.adapter = adapter
-        this.adapter!!.registerAdapterDataObserver()
+        this.adapter!!.registerAdapterDataObserver(dataObserver!!)
 
     }
 
     fun setListener(listener: SwipeStackListener?) {
-        this.listener = listener
+        this.swipeStackListener = listener
     }
 
-    fun setSwipeProgressListener(listener: SwipeProgressListener?){
+    fun setSwipeProgressListener(listener: SwipeProgressListener?) {
         progressListener = listener
     }
 

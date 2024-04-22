@@ -13,11 +13,12 @@ import android.view.View
 abstract class AbstractSwiper : View.OnTouchListener {
     protected var observedView: View? = null
     protected var listenForTouchEvents: Boolean = false
-    protected var rotateDegreess: Float = 0f
-    protected var opacityEnd: Float = 0f
-    protected var animationDuration: Int = 0
     protected var initialX: Float = 0f
     protected var initialY: Float = 0f
+
+    var opacityEnd: Float = 0f
+    var rotateDegreess: Float = 0f
+    var animationDuration: Int = 0
 
     /**
      * Registers a [View] to be observed for touch events.
@@ -46,32 +47,5 @@ abstract class AbstractSwiper : View.OnTouchListener {
 
         observedView = null
         listenForTouchEvents = false
-    }
-
-    /**
-     * Sets the duration for the swipe animations.
-     *
-     * @param duration Duration in milliseconds.
-     */
-    fun setAnimationDuration(duration: Int) {
-        animationDuration = duration
-    }
-
-    /**
-     * Sets the rotation angle for the swipe animation.
-     *
-     * @param rotation Rotation angle in degrees.
-     */
-    fun setRotation(rotation: Float) {
-        rotateDegreess = rotation
-    }
-
-    /**
-     * Sets the ending opacity for the swipe animation.
-     *
-     * @param alpha Ending opacity value from 0.0 (transparent) to 1.0 (opaque).
-     */
-    fun setOpacityEnd(alpha: Float) {
-        opacityEnd = alpha
     }
 }

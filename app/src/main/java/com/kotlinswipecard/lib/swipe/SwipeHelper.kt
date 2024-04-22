@@ -5,6 +5,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.kotlinswipecard.lib.animations.AnimationUtil
 import com.kotlinswipecard.lib.animations.SwipesAnimator
+import com.kotlinswipecard.lib.view.AbstractCardStackView
 import com.kotlinswipecard.lib.view.CardStackView
 import kotlin.math.abs
 import kotlin.math.max
@@ -80,11 +81,11 @@ class SwipeHelper(private val swipeStack: CardStackView) : AbstractSwiper() {
         val parentLastThird = parentFirstThird * 2
 
         if (viewCenterHorizontal < parentFirstThird &&
-            swipeStack.allowedSwipeDirections != swipeStack.SWIPE_DIRECTION_ONLY_RIGHT
+            swipeStack.allowedSwipeDirections != AbstractCardStackView.SWIPE_DIRECTION_ONLY_RIGHT
         )
             swipeViewToLeft(animationDuration / 2)
         else if (viewCenterHorizontal > parentLastThird &&
-            swipeStack.allowedSwipeDirections != swipeStack.SWIPE_DIRECTION_ONLY_LEFT
+            swipeStack.allowedSwipeDirections != AbstractCardStackView.SWIPE_DIRECTION_ONLY_LEFT
         )
             swipeViewToRight(animationDuration / 2)
         else
@@ -99,7 +100,7 @@ class SwipeHelper(private val swipeStack: CardStackView) : AbstractSwiper() {
         if (!listenForTouchEvents) return
         listenForTouchEvents = false
         observedView?.let { view ->
-            swipesAnimator.animateHorizontalSwipe(
+            SwipesAnimator.animateHorizontalSwipe(
                 view,
                 -swipeStack.width + view.x,
                 -rotateDegreess,
