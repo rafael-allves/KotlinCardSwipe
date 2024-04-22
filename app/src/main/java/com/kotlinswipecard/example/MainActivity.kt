@@ -4,12 +4,9 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.kotlinswipecard.R
 import com.kotlinswipecard.lib.config.StackDirection
 import com.kotlinswipecard.lib.config.SwipeDirection
@@ -60,8 +57,7 @@ class MainActivity : Activity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                when(direction)
-                {
+                when (direction) {
                     SwipeDirection.DOWN -> {
                         Log.d("onSwiped", "onSwiped($direction)")
                     }
@@ -86,7 +82,8 @@ class MainActivity : Activity() {
                 Log.d("onSwipeEnd", "" + myAdapter!!.itemCount)
             }
 
-            override fun isSwipeAllowed(viewHolder: RecyclerView.ViewHolder) = viewHolder is ArrayAdapter.MyViewHolder
+            override fun isSwipeAllowed(viewHolder: RecyclerView.ViewHolder) =
+                viewHolder is ArrayAdapter.MyViewHolder
         }
 
         recycler.setupStack(
