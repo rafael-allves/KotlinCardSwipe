@@ -6,6 +6,7 @@ import android.view.animation.LinearInterpolator
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.lib.config.StackDirection
 import com.kotlinswipecard.lib.config.SwiperConfig
+import com.kotlinswipecard.lib.utils.resetTransitions
 
 
 /**
@@ -82,11 +83,6 @@ class CardStackLayoutManager(
         }
     }
 
-    private fun View.scale(scale: Float) {
-        scaleX = scale
-        scaleY = scale
-    }
-
     /**
      * Adds and measures a view within the RecyclerView's layout.
      *
@@ -108,17 +104,6 @@ class CardStackLayoutManager(
             widthSpace + decoratedMeasuredWidth,
             heightSpace + decoratedMeasuredHeight
         )
-    }
-
-    /**
-     * Resets transformations applied to the view, setting scale to 1 and translations to 0.
-     *
-     * @receiver The view to reset transformations on.
-     */
-    private fun View.resetTransitions() {
-        scale(1f)
-        translationX = 0f
-        translationY = 0f
     }
 
     /**

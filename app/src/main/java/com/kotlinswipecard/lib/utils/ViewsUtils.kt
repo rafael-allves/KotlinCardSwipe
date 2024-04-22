@@ -5,9 +5,15 @@ import com.kotlinswipecard.lib.config.StackDirection
 import com.kotlinswipecard.lib.config.SwiperConfig
 import kotlin.math.absoluteValue
 
-fun View.scale(scale: Float){
+fun View.scale(scale: Float) {
     scaleX = scale
     scaleY = scale
+}
+
+fun View.resetTransitions() {
+    scale(1f)
+    translationX = 0f
+    translationY = 0f
 }
 
 fun View.translateForPosition(config: SwiperConfig, pos: Int, ratio: Float) {

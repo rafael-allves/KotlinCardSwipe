@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.lib.config.SwipeDirection
 import com.kotlinswipecard.lib.config.SwiperConfig
 import com.kotlinswipecard.lib.listeners.SwipeStackListener
+import com.kotlinswipecard.lib.utils.scaleForPosition
+import com.kotlinswipecard.lib.utils.xThreshold
+import com.kotlinswipecard.lib.utils.yThreshold
 import com.kotlinswipecard.lib.view.CardStackLayoutManager
 import kotlin.math.absoluteValue
 
@@ -14,7 +17,7 @@ class SwipeHelper(
     private val config: SwiperConfig
 ) : ItemTouchHelper.Callback() {
 
-    var allowSwipe = true
+    private var allowSwipe = true
 
     override fun isItemViewSwipeEnabled(): Boolean = allowSwipe
 
@@ -77,11 +80,16 @@ class SwipeHelper(
         for (pos in start until childCount - 1) {
             val idx = childCount - pos - 1
             val view = recyclerView.getChildAt(pos)
-            view.scaleForPosition(idx, ratio)
-            view.translateForPosition(idx, ratio)
+            view.scaleForPosition(config, idx, ratio)
+            view.translateForPosition(config, idx, ratio)
         }
         listener.onSwipe(viewHolder, dX, dY, direction)
     }
 
 
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        super.clearView(recyclerView, viewHolder)
+        viewHolder.itemView.rotation = 0f
+        listener.onSwipeEnd(viewHolder)
+    }
 }
