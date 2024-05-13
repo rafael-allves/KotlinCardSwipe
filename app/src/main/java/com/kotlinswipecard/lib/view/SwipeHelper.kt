@@ -127,12 +127,16 @@ class SwipeHelper(
                 SwipeDirection.RIGHT
             else
                 SwipeDirection.LEFT
-        } else {
+        } else if (dX.absoluteValue < dY.absoluteValue){
             ratio = (dY / recyclerView.yThreshold).coerceIn(-1f, 1f)
             direction = if (dY > 0)
                 SwipeDirection.DOWN
             else
                 SwipeDirection.UP
+        } else {
+            ratio = 0f
+            direction = SwipeDirection.NONE
+
         }
         itemView.rotation = ratioX * config.itemRotation
 

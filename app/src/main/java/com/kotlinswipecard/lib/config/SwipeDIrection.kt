@@ -29,6 +29,7 @@ annotation class SwipeDirection {
         const val UP = ItemTouchHelper.UP
         const val RIGHT = ItemTouchHelper.RIGHT
         const val DOWN = ItemTouchHelper.DOWN
+        const val NONE = -1
 
         /** Represents a combination of all defined swipe directions. */
         const val ALL = LEFT or UP or RIGHT or DOWN
