@@ -53,7 +53,31 @@ val RecyclerView.xThreshold: Float
 val RecyclerView.yThreshold: Float
     get() = xThreshold
 
-
+/**
+ * Performs a swipe gesture on a `RecyclerView` from a target view's position.
+ *
+ * @receiver The `RecyclerView` on which the swipe gesture will be performed.
+ * @param target The `View` from which the swipe gesture starts.
+ * @param distanceX The distance to swipe in the X direction.
+ * @param distanceY The distance to swipe in the Y direction.
+ *
+ * This function simulates a swipe gesture on a `RecyclerView`, starting from the
+ * target view's position and moving by the specified distances in the X and Y directions.
+ * The swipe gesture is divided into a number of steps to create a smooth movement.
+ *
+ * The function obtains the initial coordinates of the target view in both global and
+ * local coordinate systems, then generates and dispatches a sequence of touch events
+ * (`MotionEvent`) to simulate the swipe.
+ *
+ * Example usage:
+ * ```
+ * recyclerView.performSwipe(targetView, 500f, 0f) // Swipe 500 pixels to the right
+ * recyclerView.performSwipe(targetView, 0f, 500f) // Swipe 500 pixels downwards
+ * ```
+ *
+ * Note: Ensure that the `RecyclerView` and the target view are properly initialized and
+ * visible before calling this function. This function is intended for testing purposes.
+ */
 fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) {
     val parentCoords = intArrayOf(0, 0)
     this.getLocationInWindow(parentCoords)
