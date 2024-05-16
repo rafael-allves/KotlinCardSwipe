@@ -83,42 +83,4 @@ fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) 
             source = InputDevice.SOURCE_TOUCHSCREEN
         })
 
-    val moveGlobalX = initGlobalX + distanceX
-    val moveGlobalY = initGlobalY + distanceY
-    val moveLocalX = initLocalX + distanceX
-    val moveLocalY = initLocalY + distanceY
-
-    // Dispatch ACTION_MOVE event
-    eventTime += 100 // Increase time for move event
-    this.dispatchTouchEvent(
-        MotionEvent.obtain(
-            downTime,
-            eventTime,
-            MotionEvent.ACTION_MOVE,
-            moveGlobalX,
-            moveGlobalY,
-            0
-        ).apply {
-            setLocation(moveLocalX, moveLocalY)
-            source = InputDevice.SOURCE_TOUCHSCREEN
-        }
-    )
-
-    // Dispatch ACTION_UP event
-    eventTime += 100 // Increase time for up event
-    this.dispatchTouchEvent(
-        MotionEvent.obtain(
-            downTime,
-            eventTime,
-            MotionEvent.ACTION_UP,
-            moveGlobalX,
-            moveGlobalY,
-            0
-        ).apply {
-            setLocation(moveLocalX, moveLocalY)
-            source = InputDevice.SOURCE_TOUCHSCREEN
-        }
-    )
-}
-
 }
