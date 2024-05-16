@@ -83,4 +83,13 @@ fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) 
             source = InputDevice.SOURCE_TOUCHSCREEN
         })
 
+    val steps: Int = 20
+    var i: Int = 0
+
+    while(i < steps){
+
+
+        ++i
+    }
+
 }
