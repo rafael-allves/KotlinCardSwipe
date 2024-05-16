@@ -161,3 +161,7 @@ fun RecyclerView.performSwipeToRight(target: View) {
 fun RecyclerView.performSwipeToTop(target: View) {
     this.performSwipe(target, distanceX = 0f, distanceY = -this.height * .5f)
 }
+
+fun RecyclerView.performSwipeToBottom(target: View) {
+    this.performSwipe(target, distanceX = 0f, distanceY = +this.width * .5f)
+}
