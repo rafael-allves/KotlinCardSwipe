@@ -39,5 +39,5 @@ fun View.scaleForPosition(config: SwiperConfig, pos: Int, ratio: Float) {
 }
 
 fun View.performSwipe(distanceX: Float, distanceY: Float){
-
+    val coords = this.getLocationInWindow(intArrayOf(0, 0))
 }
