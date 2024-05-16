@@ -37,7 +37,3 @@ fun View.scaleForPosition(config: SwiperConfig, pos: Int, ratio: Float) {
     // The swipe ratio modifies the scale based on how much the user has swiped the view.
     scale(1 - pos * config.itemScale + ratio.absoluteValue * config.itemScale)
 }
-
-fun View.performSwipe(distanceX: Float, distanceY: Float){
-    val coords = this.getLocationInWindow(intArrayOf(0, 0))
-}
