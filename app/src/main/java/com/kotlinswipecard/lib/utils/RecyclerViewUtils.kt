@@ -149,3 +149,7 @@ fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) 
         }
     )
 }
+
+fun RecyclerView.performSwipeToLeft(target: View) {
+    this.performSwipe(target, distanceX = -this.width * .5f, distanceY = 0f)
+}
