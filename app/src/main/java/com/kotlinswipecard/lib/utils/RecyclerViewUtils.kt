@@ -4,7 +4,6 @@ import android.os.SystemClock
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.lib.config.SwiperConfig
@@ -55,7 +54,7 @@ val RecyclerView.yThreshold: Float
     get() = xThreshold
 
 
-fun ViewGroup.performSwipe(target: View, distanceX: Float, distanceY: Float) {
+fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) {
     val parentCoords = intArrayOf(0, 0)
     this.getLocationInWindow(parentCoords)
 
@@ -83,4 +82,43 @@ fun ViewGroup.performSwipe(target: View, distanceX: Float, distanceY: Float) {
             setLocation(initLocalX, initLocalY)
             source = InputDevice.SOURCE_TOUCHSCREEN
         })
+
+    val moveGlobalX = initGlobalX + distanceX
+    val moveGlobalY = initGlobalY + distanceY
+    val moveLocalX = initLocalX + distanceX
+    val moveLocalY = initLocalY + distanceY
+
+    // Dispatch ACTION_MOVE event
+    eventTime += 100 // Increase time for move event
+    this.dispatchTouchEvent(
+        MotionEvent.obtain(
+            downTime,
+            eventTime,
+            MotionEvent.ACTION_MOVE,
+            moveGlobalX,
+            moveGlobalY,
+            0
+        ).apply {
+            setLocation(moveLocalX, moveLocalY)
+            source = InputDevice.SOURCE_TOUCHSCREEN
+        }
+    )
+
+    // Dispatch ACTION_UP event
+    eventTime += 100 // Increase time for up event
+    this.dispatchTouchEvent(
+        MotionEvent.obtain(
+            downTime,
+            eventTime,
+            MotionEvent.ACTION_UP,
+            moveGlobalX,
+            moveGlobalY,
+            0
+        ).apply {
+            setLocation(moveLocalX, moveLocalY)
+            source = InputDevice.SOURCE_TOUCHSCREEN
+        }
+    )
+}
+
 }
