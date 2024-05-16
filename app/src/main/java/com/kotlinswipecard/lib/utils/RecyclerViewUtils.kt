@@ -150,18 +150,42 @@ fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) 
     )
 }
 
+/**
+ * Perform a swipe gesture to the left on the specified target view within the RecyclerView.
+ *
+ * @receiver RecyclerView The RecyclerView in which the swipe gesture is performed.
+ * @param target View The target view within the RecyclerView to swipe.
+ */
 fun RecyclerView.performSwipeToLeft(target: View) {
     this.performSwipe(target, distanceX = -this.width * .5f, distanceY = 0f)
 }
 
+/**
+ * Perform a swipe gesture to the right on the specified target view within the RecyclerView.
+ *
+ * @receiver RecyclerView The RecyclerView in which the swipe gesture is performed.
+ * @param target View The target view within the RecyclerView to swipe.
+ */
 fun RecyclerView.performSwipeToRight(target: View) {
     this.performSwipe(target, distanceX = +this.width * .5f, distanceY = 0f)
 }
 
+/**
+ * Perform a swipe gesture to the top on the specified target view within the RecyclerView.
+ *
+ * @receiver RecyclerView The RecyclerView in which the swipe gesture is performed.
+ * @param target View The target view within the RecyclerView to swipe.
+ */
 fun RecyclerView.performSwipeToTop(target: View) {
     this.performSwipe(target, distanceX = 0f, distanceY = -this.height * .5f)
 }
 
+/**
+ * Perform a swipe gesture to the bottom on the specified target view within the RecyclerView.
+ *
+ * @receiver RecyclerView The RecyclerView in which the swipe gesture is performed.
+ * @param target View The target view within the RecyclerView to swipe.
+ */
 fun RecyclerView.performSwipeToBottom(target: View) {
-    this.performSwipe(target, distanceX = 0f, distanceY = +this.width * .5f)
+    this.performSwipe(target, distanceX = 0f, distanceY = +this.height * .5f)
 }
