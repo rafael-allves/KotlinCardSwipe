@@ -95,6 +95,20 @@ fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) 
         if (globalX <= 10f || globalY <= 10f)
             break
 
+        this.dispatchTouchEvent(
+            MotionEvent.obtain(
+                downTime,
+                ++eventTime,
+                MotionEvent.ACTION_MOVE,
+                globalX,
+                globalY,
+                0
+            ).apply {
+                setLocation(localX, localY)
+                source = InputDevice.SOURCE_TOUCHSCREEN
+            }
+        )
+
         ++i
     }
 
