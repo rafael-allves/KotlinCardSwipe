@@ -1,14 +1,16 @@
 package com.kotlinswipecard.lib.utils
 
 import android.os.SystemClock
+import android.view.InputDevice
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.lib.config.SwiperConfig
 import com.kotlinswipecard.lib.listeners.SwipeStackListener
-import com.kotlinswipecard.lib.view.SwipeHelper
 import com.kotlinswipecard.lib.view.CardStackLayoutManager
+import com.kotlinswipecard.lib.view.SwipeHelper
 
 /**
  * Configures the RecyclerView to use CardStackLayoutManager and attaches a SwipeHelper
@@ -68,4 +70,17 @@ fun ViewGroup.performSwipe(target: View, distanceX: Float, distanceY: Float) {
 
     val downTime = SystemClock.uptimeMillis()
     var eventTime = SystemClock.uptimeMillis()
+
+    this.dispatchTouchEvent(
+        MotionEvent.obtain(
+            downTime,
+            eventTime,
+            MotionEvent.ACTION_DOWN,
+            initGlobalX,
+            initGlobalY,
+            0
+        ).apply {
+            setLocation(initLocalX, initLocalY)
+            source = InputDevice.SOURCE_TOUCHSCREEN
+        })
 }
