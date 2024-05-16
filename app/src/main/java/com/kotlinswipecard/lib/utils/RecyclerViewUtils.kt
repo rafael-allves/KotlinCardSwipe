@@ -1,11 +1,15 @@
 package com.kotlinswipecard.lib.utils
 
+import android.os.SystemClock
+import android.view.InputDevice
+import android.view.MotionEvent
+import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.lib.config.SwiperConfig
 import com.kotlinswipecard.lib.listeners.SwipeStackListener
-import com.kotlinswipecard.lib.view.SwipeHelper
 import com.kotlinswipecard.lib.view.CardStackLayoutManager
+import com.kotlinswipecard.lib.view.SwipeHelper
 
 /**
  * Configures the RecyclerView to use CardStackLayoutManager and attaches a SwipeHelper
@@ -48,3 +52,140 @@ val RecyclerView.xThreshold: Float
  */
 val RecyclerView.yThreshold: Float
     get() = xThreshold
+
+/**
+ * Performs a swipe gesture on a `RecyclerView` from a target view's position.
+ *
+ * @receiver The `RecyclerView` on which the swipe gesture will be performed.
+ * @param target The `View` from which the swipe gesture starts.
+ * @param distanceX The distance to swipe in the X direction.
+ * @param distanceY The distance to swipe in the Y direction.
+ *
+ * This function simulates a swipe gesture on a `RecyclerView`, starting from the
+ * target view's position and moving by the specified distances in the X and Y directions.
+ * The swipe gesture is divided into a number of steps to create a smooth movement.
+ *
+ * The function obtains the initial coordinates of the target view in both global and
+ * local coordinate systems, then generates and dispatches a sequence of touch events
+ * (`MotionEvent`) to simulate the swipe.
+ *
+ * Example usage:
+ * ```
+ * recyclerView.performSwipe(targetView, 500f, 0f) // Swipe 500 pixels to the right
+ * recyclerView.performSwipe(targetView, 0f, 500f) // Swipe 500 pixels downwards
+ * ```
+ *
+ * Note: Ensure that the `RecyclerView` and the target view are properly initialized and
+ * visible before calling this function. This function is intended for testing purposes.
+ */
+fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) {
+    val parentCoords = intArrayOf(0, 0)
+    this.getLocationInWindow(parentCoords)
+
+    val childCoords = intArrayOf(0, 0)
+    target.getLocationInWindow(childCoords)
+
+    val initGlobalX = childCoords[0].toFloat() + 1f
+    val initGlobalY = childCoords[1].toFloat() + 1f
+
+    val initLocalX = (childCoords[0] - parentCoords[0]).toFloat() + 1f
+    val initLocalY = (childCoords[1] - parentCoords[1]).toFloat() + 1f
+
+    val downTime = SystemClock.uptimeMillis()
+    var eventTime = SystemClock.uptimeMillis()
+
+    this.dispatchTouchEvent(
+        MotionEvent.obtain(
+            downTime,
+            eventTime,
+            MotionEvent.ACTION_DOWN,
+            initGlobalX,
+            initGlobalY,
+            0
+        ).apply {
+            setLocation(initLocalX, initLocalY)
+            source = InputDevice.SOURCE_TOUCHSCREEN
+        })
+
+    val steps = 20
+    var i = 0
+
+    while (i in 0..steps) {
+        val globalX = initGlobalX + i * distanceX / steps
+        val globalY = initGlobalY + i * distanceY / steps
+        val localX = initLocalX + i * distanceX / steps
+        val localY = initLocalY + i * distanceY / steps
+
+        if (globalX <= 10f || globalY <= 10f)
+            break
+
+        this.dispatchTouchEvent(
+            MotionEvent.obtain(
+                downTime,
+                ++eventTime,
+                MotionEvent.ACTION_MOVE,
+                globalX,
+                globalY,
+                0
+            ).apply {
+                setLocation(localX, localY)
+                source = InputDevice.SOURCE_TOUCHSCREEN
+            }
+        )
+        ++i
+    }
+
+    this.dispatchTouchEvent(
+        MotionEvent.obtain(
+            downTime,
+            ++eventTime,
+            MotionEvent.ACTION_UP,
+            initGlobalX + i * distanceX,
+            initGlobalY + i * distanceY,
+            0
+        ).apply {
+            setLocation(initLocalX + i * distanceX, initLocalY + i * distanceY)
+            source = InputDevice.SOURCE_TOUCHSCREEN
+        }
+    )
+}
+
+/**
+ * Perform a swipe gesture to the left on the specified target view within the RecyclerView.
+ *
+ * @receiver RecyclerView The RecyclerView in which the swipe gesture is performed.
+ * @param target View The target view within the RecyclerView to swipe.
+ */
+fun RecyclerView.performSwipeToLeft(target: View) {
+    this.performSwipe(target, distanceX = -this.width * .5f, distanceY = 0f)
+}
+
+/**
+ * Perform a swipe gesture to the right on the specified target view within the RecyclerView.
+ *
+ * @receiver RecyclerView The RecyclerView in which the swipe gesture is performed.
+ * @param target View The target view within the RecyclerView to swipe.
+ */
+fun RecyclerView.performSwipeToRight(target: View) {
+    this.performSwipe(target, distanceX = +this.width * .5f, distanceY = 0f)
+}
+
+/**
+ * Perform a swipe gesture to the top on the specified target view within the RecyclerView.
+ *
+ * @receiver RecyclerView The RecyclerView in which the swipe gesture is performed.
+ * @param target View The target view within the RecyclerView to swipe.
+ */
+fun RecyclerView.performSwipeToTop(target: View) {
+    this.performSwipe(target, distanceX = 0f, distanceY = -this.height * .5f)
+}
+
+/**
+ * Perform a swipe gesture to the bottom on the specified target view within the RecyclerView.
+ *
+ * @receiver RecyclerView The RecyclerView in which the swipe gesture is performed.
+ * @param target View The target view within the RecyclerView to swipe.
+ */
+fun RecyclerView.performSwipeToBottom(target: View) {
+    this.performSwipe(target, distanceX = 0f, distanceY = +this.height * .5f)
+}
