@@ -1,5 +1,8 @@
 package com.kotlinswipecard.lib.utils
 
+import android.os.SystemClock
+import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinswipecard.lib.config.SwiperConfig
@@ -48,3 +51,21 @@ val RecyclerView.xThreshold: Float
  */
 val RecyclerView.yThreshold: Float
     get() = xThreshold
+
+
+fun ViewGroup.performSwipe(target: View, distanceX: Float, distanceY: Float) {
+    val parentCoords = intArrayOf(0, 0)
+    this.getLocationInWindow(parentCoords)
+
+    val childCoords = intArrayOf(0, 0)
+    target.getLocationInWindow(childCoords)
+
+    val initGlobalX = childCoords[0].toFloat() + 1f
+    val initGlobalY = childCoords[1].toFloat() + 1f
+
+    val initLocalX = (childCoords[0] - parentCoords[0]).toFloat() + 1f
+    val initLocalY = (childCoords[1] - parentCoords[1]).toFloat() + 1f
+
+    val downTime = SystemClock.uptimeMillis()
+    var eventTime = SystemClock.uptimeMillis()
+}
