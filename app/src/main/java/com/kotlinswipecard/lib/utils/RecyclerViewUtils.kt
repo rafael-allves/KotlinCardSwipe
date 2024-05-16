@@ -87,7 +87,13 @@ fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) 
     var i: Int = 0
 
     while(i < steps){
+        val globalX = initGlobalX + i * distanceX / steps
+        val globalY = initGlobalY + i * distanceY / steps
+        val localX = initLocalX + i * distanceX / steps
+        val localY = initLocalY + i * distanceY / steps
 
+        if (globalX <= 10f || globalY <= 10f)
+            break
 
         ++i
     }
