@@ -86,7 +86,7 @@ fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) 
     val steps: Int = 20
     var i: Int = 0
 
-    while(i < steps){
+    while (i < steps) {
         val globalX = initGlobalX + i * distanceX / steps
         val globalY = initGlobalY + i * distanceY / steps
         val localX = initLocalX + i * distanceX / steps
@@ -112,4 +112,17 @@ fun RecyclerView.performSwipe(target: View, distanceX: Float, distanceY: Float) 
         ++i
     }
 
+    this.dispatchTouchEvent(
+        MotionEvent.obtain(
+            downTime,
+            ++eventTime,
+            MotionEvent.ACTION_UP,
+            initGlobalX + i * distanceX,
+            initGlobalY + i * distanceY,
+            0
+        ).apply {
+            setLocation(initLocalX + i * distanceX, initLocalY + i * distanceY)
+            source = InputDevice.SOURCE_TOUCHSCREEN
+        }
+    )
 }
